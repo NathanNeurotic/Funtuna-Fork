@@ -171,11 +171,11 @@ int main(int argc, char *argv[])
 	
 
 
-		if (file_exists("mc0:/BOOT/BOOT.ELF"))
-			LoadElf("mc0:/BOOT/BOOT.ELF", "mc0:/BOOT/");
+		if (file_exists("mc0:/BOOT/FMCBD.ELF"))
+			LoadElf("mc0:/BOOT/FMCBD.ELF", "mc0:/BOOT/");
 
-		if (file_exists("mc1:/BOOT/BOOT.ELF"))
-			LoadElf("mc1:/BOOT/BOOT.ELF", "mc1:/BOOT/");
+		if (file_exists("mc1:/BOOT/FMCBD.ELF"))
+			LoadElf("mc1:/BOOT/FMCBD.ELF", "mc1:/BOOT/");
 
 		
 	

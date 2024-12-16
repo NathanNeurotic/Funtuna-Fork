@@ -12,6 +12,9 @@
 extern u8 opl_icn[];
 extern int size_opl_icn;
 //----------------------------------------//
+extern u8 opl_icn[];
+extern int size_opl_icn;
+//----------------------------------------//
 extern u8 opl_sys[];
 extern int size_opl_sys;
 //----------------------------------------//
@@ -23,7 +26,6 @@ extern int size_opl_cfg1;
 //----------------------------------------//
 extern u8 opl_dualshock[];
 extern int size_opl_dualshock;
-//
 //----------------------------------------//
 extern u8  opentuna_slims[];
 extern int size_opentuna_slims;
@@ -37,11 +39,11 @@ extern int size_opentuna_fat170;
 extern u8 exploit_sys[];
 extern int size_exploit_sys;
 //----------------------------------------//
-extern u8 FMCB_ELF[];
-extern int size_FMCB_ELF;
+extern u8 FMCBD_ELF[];
+extern int size_FMCBD_ELF;
 //----------------------------------------//
-extern u8 FMCB_CNF[];
-extern int size_FMCB_CNF;
+extern u8 FMCBD_CNF[];
+extern int size_FMCBD_CNF;
 //----------------------------------------//
 extern u8 CFG_ELF[];
 extern int size_CFG_ELF;
@@ -70,8 +72,11 @@ extern int size_opl_elf;
 extern u8 ule_elf[];
 extern int size_ule_elf;
 //----------------------------------------//
-extern u8 apps_icn[];
-extern int size_apps_icn;
+extern u8 ps2bbl_elf[];
+extern int size_ps2bbl_elf;
+//----------------------------------------//
+extern u8 ps2bbl_ini[];
+extern int size_ps2bbl_ini;
 //----------------------------------------//
 extern u8 apps_sys[];
 extern int size_apps_sys;
@@ -398,11 +403,8 @@ static int install(int mcport, int icon_variant)
 	scr_printf("\t\tBOOT\n");
 		ret = mcMkDir(mcport, 0, "BOOT");
 		mcSync(0, NULL, &ret);
-	scr_printf("\t\tAPPS\n");
-		ret = mcMkDir(mcport, 0, "APPS");
-		mcSync(0, NULL, &ret);
-	scr_printf("\t\tOPL\n");
-		ret = mcMkDir(mcport, 0, "OPL");
+	scr_printf("\t\tSYS-CONF\n");
+		ret = mcMkDir(mcport, 0, "SYS-CONF");
 		mcSync(0, NULL, &ret);
 	if (icon_variant != UNSUPPORTED){
 	scr_printf("\t\tBXEXEC-OPENTUNA\n");
@@ -461,19 +463,23 @@ static int install(int mcport, int icon_variant)
 	///OPENTUNA
 	
 	//FUNTUNA&APPS
-	scr_printf("\t\tuLaunchELF\n");
-		retorno = write_embed(&ule_elf, size_ule_elf, "BOOT", "ULE.ELF",mcport);
+	scr_printf("\t\twLaunchELF\n");
+		retorno = write_embed(&ule_elf, size_ule_elf, "BOOT", "BOOT2.ELF",mcport);
 		if (retorno < 0) {return 6;}
 		retorno = write_embed(&ule_cnf, size_ule_cnf, "BOOT", "LAUNCHELF.CNF",mcport);
 		if (retorno < 0) {return 6;}
-
-	scr_printf("\t\tFreeMcBoot\n");
-		retorno = write_embed(&FMCB_ELF, size_FMCB_ELF, "BOOT", "BOOT.ELF",mcport);
+	scr_printf("\t\tPS2BBL\n");
+		retorno = write_embed(&ps2bbl_elf, size_ps2bbl_elf, "BOOT", "BOOT.ELF",mcport);
 		if (retorno < 0) {return 6;}
-		retorno = write_embed(&FMCB_CNF, size_FMCB_CNF, "BOOT", "FUNTUNA.CNF",mcport);
+		retorno = write_embed(&ps2bbl_ini, size_ps2bbl_ini, "BOOT", "CONFIG.INI",mcport);
+		if (retorno < 0) {return 6;}
+	scr_printf("\t\tFreeMcBoot\n");
+		retorno = write_embed(&FMCB_ELF, size_FMCBD_ELF, "BOOT", "FMCBD.ELF",mcport);
+		if (retorno < 0) {return 6;}
+		retorno = write_embed(&FMCB_CNF, size_FMCBD_CNF, "SYS-CONF", "FREEMCB.CNF",mcport);
 		if (retorno < 0) {return 6;}
 	scr_printf("\t\tFreeMcBoot Configurator\n");
-		retorno = write_embed(&CFG_ELF, size_CFG_ELF, "BOOT", "CFG.ELF",mcport);
+		retorno = write_embed(&CFG_ELF, size_CFG_ELF, "SYS-CONF", "FMCB_CFG.ELF",mcport);
 		if (retorno < 0) {return 6;}
         
     scr_printf("\t\tFreeMcBoot USB drivers\n");
@@ -483,33 +489,13 @@ static int install(int mcport, int icon_variant)
 		if (retorno < 0) {return 6;}
 
 	scr_printf("\t\tBOOT icons\n");
-		retorno = write_embed(&boot_icn, size_boot_icn, "BOOT", "SYSTEM.icn",mcport);
+		retorno = write_embed(&boot_icn, size_boot_icn, "BOOT", "BOOT.icn",mcport);
 		if (retorno < 0) {return 6;}
 		retorno = write_embed(&boot_sys, size_boot_sys, "BOOT", "icon.sys",mcport);
 		if (retorno < 0) {return 6;}
 	scr_printf("\t\tPoweroff utility\n");
 		retorno = write_embed(&poweroff_elf, size_poweroff_elf, "BOOT", "POWEROFF.ELF",mcport);
 		if (retorno < 0) {return 6;}
-	///FUNTUNA&APPS
-	scr_printf("\t\tAPPS folder icons\n");
-		retorno = write_embed(&apps_sys, size_apps_sys, "APPS","icon.sys",mcport);
-		if (retorno < 0) {return 6;}
-		retorno = write_embed(&apps_icn, size_apps_icn, "APPS","funtuna_apps.icn",mcport);
-		if (retorno < 0) {return 6;}
-	scr_printf("\t\tOPL\n");
-		retorno = write_embed(&opl_elf, size_opl_elf, "APPS","OPNPS2LD.ELF",mcport);
-		if (retorno < 0) {return 6;}
-	if (!file_exists(opl_settings_location))//If no OPL config file...
-	{
-		scr_printf("\t\tNo OPL settings found!\n\t\t Loading Preconfigured OPL Folder...\n");
-		if (mcport==0)
-			write_embed_replace(&opl_cfg, size_opl_cfg, "OPL", "conf_opl.cfg", mcport);//main config file has two variants, each of them has IGR Path assigned according to mcport value
-		else write_embed_replace(&opl_cfg1, size_opl_cfg1, "OPL", "conf_opl.cfg", mcport);//
-		
-		write_embed_replace(&opl_icn, size_opl_icn, "OPL", "opl.icn", mcport);
-		write_embed_replace(&opl_sys, size_opl_sys, "OPL", "icon.sys", mcport);
-		write_embed_replace(&opl_dualshock, size_opl_dualshock, "OPL", "conf_game.cfg", mcport);
-	}
 	scr_printf("Installation Finished\n");
 	return 0;
 }
@@ -710,11 +696,11 @@ int main (int argc, char *argv[])
 		{
 #ifdef BOOT_FUNTUNA_ON_SUCCESS
 			if (mcport==0){
-				if (file_exists("mc0:/BOOT/BOOT.ELF")) 
-					LoadElf("mc0:/BOOT/BOOT.ELF", "mc0:/BOOT/");
+				if (file_exists("mc0:/BOOT/FMCBD.ELF")) 
+					LoadElf("mc0:/BOOT/FMCBD.ELF", "mc0:/BOOT/");
 			} else {
-				if (file_exists("mc1:/BOOT/BOOT.ELF")) 
-					LoadElf("mc1:/BOOT/BOOT.ELF", "mc1:/BOOT/");
+				if (file_exists("mc1:/BOOT/FMCBD.ELF")) 
+					LoadElf("mc1:/BOOT/FMCBD.ELF", "mc1:/BOOT/");
 			}
 #endif
 			PS2_browser();

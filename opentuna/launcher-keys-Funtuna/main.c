@@ -234,28 +234,28 @@ int main(int argc, char *argv[])
 
 	if (lastKey & PAD_CIRCLE)
 	{
-		if (file_exists("mc0:/APPS/OPNPS2LD.ELF"))
-			LoadElf("mc0:/APPS/OPNPS2LD.ELF", "mc0:/APPS/");
+		if (file_exists("mc0:/BOOT/ESR.ELF"))
+			LoadElf("mc0:/BOOT/ESR.ELF", "mc0:/BOOT/");
 
-		if (file_exists("mc1:/APPS/OPNPS2LD.ELF"))
-			LoadElf("mc1:/APPS/OPNPS2LD.ELF", "mc1:/APPS/");
+		if (file_exists("mc1:/BOOT/ESR.ELF"))
+			LoadElf("mc1:/BOOT/ESR.ELF", "mc1:/BOOT/");
 	}
 	else if (lastKey & PAD_CROSS)
 	{
-		if (file_exists("mc0:/BOOT/ULE.ELF"))
-			LoadElf("mc0:/BOOT/ULE.ELF", "mc0:/BOOT/");
+		if (file_exists("mc0:/BOOT/BOOT.ELF"))
+			LoadElf("mc0:/BOOT/BOOT.ELF", "mc0:/BOOT/");
 		
-		if (file_exists("mc1:/BOOT/ULE.ELF"))
-			LoadElf("mc1:/BOOT/ULE.ELF", "mc1:/ULE/");
+		if (file_exists("mc1:/BOOT/BOOT.ELF"))
+			LoadElf("mc1:/BOOT/BOOT.ELF", "mc1:/BOOT/");
 		
 	}
 	else
 	{
-		if (file_exists("mc0:/BOOT/BOOT.ELF"))
-			LoadElf("mc0:/BOOT/BOOT.ELF", "mc0:/BOOT/");
+		if (file_exists("mc0:/BOOT/FMCBD.ELF"))
+			LoadElf("mc0:/BOOT/FMCBD.ELF", "mc0:/BOOT/");
 
-		if (file_exists("mc1:/BOOT/BOOT.ELF"))
-			LoadElf("mc1:/BOOT/BOOT.ELF", "mc1:/BOOT/");
+		if (file_exists("mc1:/BOOT/FMCBD.ELF"))
+			LoadElf("mc1:/BOOT/FMCBD.ELF", "mc1:/BOOT/");
 	}
 
 		__asm__ __volatile__(
